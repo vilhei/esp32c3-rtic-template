@@ -7,29 +7,36 @@ version = "0.1.0"
 [dependencies]
 # defmt = { version = "0.3", features = ["encoding-rzcobs"] }
 # defmt-brtt = { version = "0.1", default-features = false, features = ["rtt"] }
-esp-backtrace = { version = "0.11.1", features = [
+esp-backtrace = { version = "0.11.0", features = [
     "esp32c3",
     "exception-handler",
     "panic-handler",
     "println",
 ] }
-esp-hal = { version = "0.16.1", features = ["esp32c3"] }
-esp-println = { version = "0.9.1", features = ["esp32c3"] }
-esp32c3 = { version = "0.20.0", features = ["rt", "critical-section"] }
+# esp-hal = { version = "0.16.0", features = ["esp32c3", "async", "interrupt-preemption"] }
+esp-hal = { git = "https://github.com/esp-rs/esp-hal", features = [
+    "esp32c3",
+    "async",
+] }
+esp-println = { version = "0.9.0", features = ["esp32c3"] }
+esp32c3 = { version = "0.21.0", features = ["rt", "critical-section"] }
 # panic-probe = { version = "0.3", features = ["print-defmt"] }
-rtic = { version = "2.0.0", features = ["esp32c3", "riscv-esp32c3-backend"] }
+# rtic = { version = "2.0.0", features = ["riscv-esp32c3-backend"] }
+rtic = { git = 'https://github.com/rtic-rs/rtic', features = [
+    "riscv-esp32c3-backend",
+] }
+
+rtic-sync = { git = 'https://github.com/rtic-rs/rtic' }
+
+rtt-target = { version = "0.4.0" }
+panic-rtt-target = "0.1.2"
 
 # TODO add a monotonic if you use scheduling
 # rtic-monotonics = { version = "1.0.0", features = [ "cortex-m-systick" ]}
 
 # cargo build/run
 [profile.dev]
-codegen-units = 1
-debug = 2
-debug-assertions = true # <-
-incremental = false
-opt-level = "s"         # <-
-overflow-checks = true  # <-
+opt-level = "s"
 
 # cargo test
 [profile.test]
@@ -46,9 +53,9 @@ codegen-units = 1
 debug = 2
 debug-assertions = false # <-
 incremental = false
-lto = 'fat'
-opt-level = "s"          # <-
-overflow-checks = false  # <-
+# lto = 'fat'
+opt-level = "s"         # <-
+overflow-checks = false # <-
 
 # cargo test --release
 [profile.bench]
