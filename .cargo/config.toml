@@ -16,6 +16,3 @@ rustflags = [
 target = "riscv32imc-unknown-none-elf"
 
 [alias]
-rb = "run --bin"
-rrb = "run --release --bin"
-bbr = "build --release --bin"
