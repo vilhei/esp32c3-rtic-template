@@ -4,6 +4,7 @@
 use esp_backtrace as _; // Panic behaviour
 
 use rtic::app;
+mod timer_task;
 
 // remove dispatchers if you do not need software tasks. You need to have as many dispatchers as you have different priority levels for software tasks
 #[app(device=esp32c3, dispatchers = [FROM_CPU_INTR0,FROM_CPU_INTR1, FROM_CPU_INTR2, FROM_CPU_INTR3] )]
@@ -81,23 +82,15 @@ mod app {
         }
     }
 
-    #[task(binds= TG0_T0_LEVEL, local=[timer0])]
-    fn timer0_task(cx: timer0_task::Context) {
-        cx.local.timer0.clear_interrupt();
-        println!("Timer task");
-        task1::spawn().unwrap();
-        task1b::spawn().unwrap();
-        task4::spawn().unwrap();
-        task2::spawn().unwrap();
-        task3::spawn().unwrap();
-        cx.local.timer0.start(2u32.secs());
-    }
+    use crate::timer_task::{timer0_task, timer1_task};
 
-    #[task(binds= TG1_T0_LEVEL, shared=[timer1])]
-    fn timer1_task(mut cx: timer1_task::Context) {
-        cx.shared.timer1.lock(|t| t.clear_interrupt());
-        println!("Inside timer 1 task");
-        cx.shared.timer1.lock(|t| t.start(3u32.secs()));
+    /// Tasks can be moved to different scope by using extern methods
+    extern "Rust" {
+        #[task(binds= TG0_T0_LEVEL, local=[timer0])]
+        fn timer0_task(cx: timer0_task::Context);
+
+        #[task(binds= TG1_T0_LEVEL, shared=[timer1])]
+        fn timer1_task(mut cx: timer1_task::Context);
     }
 
     /// Sets timer1_task on and off via the boot button on the esp32c3
