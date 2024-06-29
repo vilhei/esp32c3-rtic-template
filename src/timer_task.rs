@@ -1,9 +1,9 @@
 use esp_println::println;
+use fugit::ExtU32;
 
 use crate::app::{task1, task1b, task2, task3, task4, timer0_task, timer1_task};
 use esp_hal::prelude::*;
 use rtic::mutex_prelude::*;
-
 
 pub(crate) fn timer0_task(cx: timer0_task::Context) {
     cx.local.timer0.clear_interrupt();

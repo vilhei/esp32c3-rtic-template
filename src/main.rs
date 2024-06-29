@@ -1,14 +1,15 @@
 #![no_main]
 #![no_std]
 #![feature(type_alias_impl_trait)]
-use esp_backtrace as _; // Panic behaviour
 
 use rtic::app;
 mod timer_task;
 
 // remove dispatchers if you do not need software tasks. You need to have as many dispatchers as you have different priority levels for software tasks
-#[app(device=esp32c3, dispatchers = [FROM_CPU_INTR0,FROM_CPU_INTR1, FROM_CPU_INTR2, FROM_CPU_INTR3] )]
+#[app(device=esp32c3, dispatchers=[FROM_CPU_INTR0, FROM_CPU_INTR1,  FROM_CPU_INTR2,  FROM_CPU_INTR3])]
 mod app {
+    use esp_backtrace as _; // Panic behaviour
+
     use esp_hal::{
         self as _,
         clock::ClockControl,
@@ -57,7 +58,7 @@ mod app {
         button.listen(esp_hal::gpio::Event::FallingEdge);
 
         timer0.listen();
-        timer0.start(2u32.secs());
+        timer0.start(2u64.secs());
 
         task1::spawn().expect("Failed to spawn task1");
 
@@ -108,7 +109,7 @@ mod app {
                 false => {
                     t.clear_interrupt();
                     t.listen();
-                    t.start(3u32.secs());
+                    t.start(3u64.secs());
                     true
                 }
             }
