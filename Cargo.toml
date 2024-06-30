@@ -20,7 +20,7 @@ esp-println = { version = "0.9.1", features = ["esp32c3", "uart"] }
 esp32c3 = { version = "0.22.0", features = ["rt", "critical-section"] }
 fugit = "0.3.7"
 # rtic = { version = '2.1', features = ["riscv-esp32c3-backend"] }
-rtic = { git = 'https://github.com/rtic-rs/rtic', features = [
+rtic = { git = "https://github.com/rtic-rs/rtic", features = [
     "riscv-esp32c3-backend",
 ] }
 
