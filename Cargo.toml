@@ -1,5 +1,4 @@
 [package]
-# TODO fix `authors` and `name` if you didn't use `cargo-generate`
 name = "esp32c3-rtic-template"
 edition = "2021"
 version = "0.1.0"
@@ -11,15 +10,10 @@ esp-backtrace = { version = "0.12.1", features = [
     "panic-handler",
     "println",
 ] }
-esp-hal = { version = "0.16.0", features = [
-    "esp32c3",
-    "interrupt-preemption",
-    "direct-vectoring",
-] }
+esp-hal = { version = "0.18.0", features = ["esp32c3"] }
 esp-println = { version = "0.9.1", features = ["esp32c3", "uart"] }
 esp32c3 = { version = "0.22.0", features = ["rt", "critical-section"] }
 fugit = "0.3.7"
-# rtic = { version = '2.1', features = ["riscv-esp32c3-backend"] }
 rtic = { git = 'https://github.com/rtic-rs/rtic', features = [
     "riscv-esp32c3-backend",
 ] }
